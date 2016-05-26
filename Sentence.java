@@ -27,7 +27,7 @@ import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapred.FileSplit;
 
 public class Sentence {
@@ -113,7 +113,7 @@ public class Sentence {
     //each file in directory
     for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
-        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()), FileInputFormat.class);
+        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()), TextInputFormat.class);
       } 
       else if (listOfFiles[i].isDirectory()) {
         System.out.println("Directory " + listOfFiles[i].getName());
