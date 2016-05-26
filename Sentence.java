@@ -80,7 +80,8 @@ public class Sentence {
         i++;
       }
       //write to table
-      context.write(key, p);
+      ImmutableBytesWritable tmpkey = new ImmutableBytesWritable(key.getBytes(), 0, Bytes.SIZEOF_INT);
+      context.write(tmpkey, p);
     }
   }
 
@@ -112,7 +113,7 @@ public class Sentence {
     //each file in directory
     for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
-        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()),FileInputFormat.class);
+        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()), FileInputFormat.class);
       } 
       else if (listOfFiles[i].isDirectory()) {
         System.out.println("Directory " + listOfFiles[i].getName());
