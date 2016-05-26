@@ -109,7 +109,7 @@ public class Sentence {
     //args[0] = directory path
     File folder = new File(args[0]);
     File[] listOfFiles = folder.listFiles();
-
+    System.out.println("length: " + listOfFiles.length);
     //each file in directory
     for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
