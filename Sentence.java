@@ -101,10 +101,10 @@ public class Sentence {
 
     Job job = Job.getInstance(hConf);
     job.setJarByClass(Sentence.class);
-    job.setMapperClass(SplitMapper.class);
+    job.setMapperClass(Sentence.SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
-    TableMapReduceUtil.initTableReducerJob("summary_sentence", SentenceReducer.class, job);
+    TableMapReduceUtil.initTableReducerJob("summary_sentence", Sentence.SentenceReducer.class, job);
     
     //args[0] = directory path
     File folder = new File(args[0]);
