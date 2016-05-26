@@ -96,7 +96,7 @@ public class Sentence {
     //create sentenceTable
     HTable hTable = new HTable(hConf, tableName);
 
-    Job job = Job.getInstance(conf, "split");
+    Job job = Job.getInstance(hConf, "split");
     job.setJarByClass(Sentence.class);
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
