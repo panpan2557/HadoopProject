@@ -37,7 +37,7 @@ public class Sentence {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
       FileSplit fsFileSplit = (FileSplit) context.getInputSplit();
-      filename = context.getConfiguration().get(fsFileSplit.getPath().getParent().getName()));
+      filename = context.getConfiguration().get(fsFileSplit.getPath().getParent().getName());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Sentence {
       for (int end = iterator.next(); end != BreakIterator.DONE; 
           start = end, end = iterator.next()) {
         String sentence = content.substring(start,end);
-        String info = "#" i + "/" + filename;
+        String info = "#" + i + "/" + filename;
         context.write(sentence, info);
       }
     }
