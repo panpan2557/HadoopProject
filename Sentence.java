@@ -86,8 +86,8 @@ public class Sentence {
   }
 
   public static void main(String[] args) throws Exception {
-    Configuration conf = new Configuration();
-    Configuration hConf = HBaseConfiguration.create(conf);
+    // Configuration conf = new Configuration();
+    Configuration hConf = new HBaseConfiguration();
 
     String hbaseZookeeperQuorum = "52.221.246.249";
     int hbaseZookeeperClientPort = 2181;
@@ -101,10 +101,10 @@ public class Sentence {
 
     Job job = Job.getInstance(hConf);
     job.setJarByClass(Sentence.class);
-    job.setMapperClass(Sentence.SplitMapper.class);
+    job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
-    TableMapReduceUtil.initTableReducerJob("summary_sentence", Sentence.SentenceReducer.class, job);
+    TableMapReduceUtil.initTableReducerJob("summary_sentence", SentenceReducer.class, job);
     
     //args[0] = directory path
     File folder = new File(args[0]);
