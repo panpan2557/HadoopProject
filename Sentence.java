@@ -10,10 +10,13 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.InputFormat;
+import org.apache.hadoop.mapred.lib.MultipleInputs;
 import java.text.BreakIterator;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import org.apache.hadoop.hbase.rest;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
@@ -23,6 +26,10 @@ import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.mapreduce.*;
+import java.io.*;
+import java.util.*;
+
 
 public class Sentence {
 
@@ -43,20 +50,22 @@ public class Sentence {
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
       String content = value.toString();
+      content = content.replace("\r\n"," ");
+      content = content.trim().replaceAll(" +", " ");
       BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
-      iterator.setText(value.toString());
+      iterator.setText(content);
       int start = iterator.first();
       int i = 0;
       for (int end = iterator.next(); end != BreakIterator.DONE; 
           start = end, end = iterator.next()) {
-        String sentence = content.substring(start,end);
+        String sentence = content.substring(start,end-1);
         String info = "#" + i + "/" + filename;
-        context.write(sentence, info);
+        context.write(new Text(sentence), new Text(info));
       }
     }
   }
 
-  public static class TableReducer extends TableReducer<Text,Text,ImmutableBytesWritable> {
+  public static class SentenceReducer extends TableReducer<Text,Text,ImmutableBytesWritable> {
     
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       //sentence in many book
@@ -72,7 +81,7 @@ public class Sentence {
         i++;
       }
       //write to table
-      context.write(key, put);
+      context.write(key, p);
     }
   }
 
@@ -80,22 +89,22 @@ public class Sentence {
     Configuration conf = new Configuration();
     Configuration hConf = HBaseConfiguration.create(conf);
 
-    String hbaseZookeeperQuorum="52.221.246.249";
-    String hbaseZookeeperClientPort=2181;
+    String hbaseZookeeperQuorum = "52.221.246.249";
+    int hbaseZookeeperClientPort = 2181;
     String tableName="sentenceTable";
 
     hConf.set(Constants.HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
     hConf.setInt(Constants.HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
     
     //create sentenceTable
-    hTable = new HTable(hConf, tableName);
+    HTable hTable = new HTable(hConf, tableName);
 
     Job job = Job.getInstance(conf, "split");
     job.setJarByClass(Sentence.class);
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
-    TableMapReduceUtil.initTableReducerJob("summary_sentence", TableReducer.class, job);
+    TableMapReduceUtil.initTableReducerJob("summary_sentence", SentenceReducer.class, job);
     
     //args[0] = directory path
     File folder = new File(args[0]);
