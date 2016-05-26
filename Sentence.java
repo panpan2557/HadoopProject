@@ -16,7 +16,6 @@ import java.text.BreakIterator;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import org.apache.hadoop.hbase.rest;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
@@ -26,10 +25,8 @@ import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.mapreduce.*;
-import java.io.*;
-import java.util.*;
-
+import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.hadoop.mapred.FileSplit;
 
 public class Sentence {
 
@@ -73,7 +70,7 @@ public class Sentence {
       int i = 1;
       for (Text val: values) {
         //each location
-        String[] valArr = val.split("/");
+        String[] valArr = val.toString().split("/");
         valArr[0] = valArr[0].substring(1); //remove #
         Put p = new Put(Bytes.toBytes(key.toString()));
         p.add(Bytes.toBytes("info" + i), Bytes.toBytes("sentence no."), Bytes.toBytes(valArr[0]));
@@ -93,8 +90,8 @@ public class Sentence {
     int hbaseZookeeperClientPort = 2181;
     String tableName="sentenceTable";
 
-    hConf.set(Constants.HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
-    hConf.setInt(Constants.HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
+    hConf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
+    hConf.setInt(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
     
     //create sentenceTable
     HTable hTable = new HTable(hConf, tableName);
