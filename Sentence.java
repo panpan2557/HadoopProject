@@ -13,7 +13,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.InputFormat;
-import org.apache.hadoop.mapreduce.lib.input.MultipleInputs
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import java.text.BreakIterator;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -98,7 +98,7 @@ public class Sentence {
     //create sentenceTable
     HTable hTable = new HTable(hConf, tableName);
 
-    JobConf job = JobConf(hConf);
+    Job job = Job.getInstance(hConf);
     job.setJarByClass(Sentence.class);
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
@@ -112,7 +112,7 @@ public class Sentence {
     //each file in directory
     for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
-        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()),TextInputFormat.class);
+        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()),FileInputFormat.class);
       } 
       else if (listOfFiles[i].isDirectory()) {
         System.out.println("Directory " + listOfFiles[i].getName());
