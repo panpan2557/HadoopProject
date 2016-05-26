@@ -87,7 +87,7 @@ public class Sentence {
 
   public static void main(String[] args) throws Exception {
     // Configuration conf = new Configuration();
-    Configuration hConf = new HBaseConfiguration();
+    HBaseConfiguration hConf = new HBaseConfiguration();
 
     String hbaseZookeeperQuorum = "52.221.246.249";
     int hbaseZookeeperClientPort = 2181;
