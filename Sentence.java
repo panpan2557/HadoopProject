@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.io.File;
 import java.util.StringTokenizer;
+import java.util.Locale;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -68,11 +70,11 @@ public class Sentence {
       //sentence in many book
       //ex. "I love you", [#1/book1, #1/book2]
       int i = 1;
+      Put p = new Put(Bytes.toBytes(key.toString()));
       for (Text val: values) {
         //each location
         String[] valArr = val.toString().split("/");
         valArr[0] = valArr[0].substring(1); //remove #
-        Put p = new Put(Bytes.toBytes(key.toString()));
         p.add(Bytes.toBytes("info" + i), Bytes.toBytes("sentence no."), Bytes.toBytes(valArr[0]));
         p.add(Bytes.toBytes("info" + i), Bytes.toBytes("book"), Bytes.toBytes(valArr[1]));
         i++;
