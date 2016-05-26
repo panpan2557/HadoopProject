@@ -98,7 +98,7 @@ public class Sentence {
     //create sentenceTable
     HTable hTable = new HTable(hConf, tableName);
 
-    Job job = Job.getInstance(hConf, "split");
+    JobConf job = JobConf(hConf);
     job.setJarByClass(Sentence.class);
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
@@ -112,7 +112,7 @@ public class Sentence {
     //each file in directory
     for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
-        MultipleInputs.addInputPath(job,listOfFiles[i].getName(),TextInputFormat.class);
+        MultipleInputs.addInputPath(job, new Path(listOfFiles[i].getName()),TextInputFormat.class);
       } 
       else if (listOfFiles[i].isDirectory()) {
         System.out.println("Directory " + listOfFiles[i].getName());
