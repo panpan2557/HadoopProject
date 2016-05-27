@@ -83,7 +83,7 @@ public class Sentence {
       //write to table
       // ImmutableBytesWritable tmpkey = new ImmutableBytesWritable(key.getBytes(), 0, Bytes.SIZEOF_INT);
       // context.write(tmpkey, p);
-      context.write(null, put);
+      context.write(null, p);
     }
   }
 
@@ -98,12 +98,12 @@ public class Sentence {
     // hConf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
     // hConf.setInt(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
 
-    HBaseAdmin.checkHBaseAvailable(hConf);
+    HBaseAdmin.checkHBaseAvailable(conf);
     
     //create sentenceTable
     // HTable hTable = new HTable(hConf, tableName);
 
-    Job job = Job.getInstance(hConf);
+    Job job = Job.getInstance(conf);
     job.setJarByClass(Sentence.class);
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
