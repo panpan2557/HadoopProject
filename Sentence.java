@@ -81,26 +81,27 @@ public class Sentence {
         i++;
       }
       //write to table
-      ImmutableBytesWritable tmpkey = new ImmutableBytesWritable(key.getBytes(), 0, Bytes.SIZEOF_INT);
-      context.write(tmpkey, p);
+      // ImmutableBytesWritable tmpkey = new ImmutableBytesWritable(key.getBytes(), 0, Bytes.SIZEOF_INT);
+      // context.write(tmpkey, p);
+      context.write(null, put);
     }
   }
 
   public static void main(String[] args) throws Exception {
-    // Configuration conf = new Configuration();
-    HBaseConfiguration hConf = new HBaseConfiguration();
+    Configuration conf = HBaseConfiguration.create();
+    // HBaseConfiguration hConf = new HBaseConfiguration();
 
-    String hbaseZookeeperQuorum = "52.221.246.249";
-    int hbaseZookeeperClientPort = 2181;
-    String tableName="sentenceTable";
+    // String hbaseZookeeperQuorum = "52.221.246.249";
+    // int hbaseZookeeperClientPort = 2181;
+    // String tableName="sentenceTable";
 
-    hConf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
-    hConf.setInt(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
+    // hConf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
+    // hConf.setInt(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
 
     HBaseAdmin.checkHBaseAvailable(hConf);
     
     //create sentenceTable
-    HTable hTable = new HTable(hConf, tableName);
+    // HTable hTable = new HTable(hConf, tableName);
 
     Job job = Job.getInstance(hConf);
     job.setJarByClass(Sentence.class);
