@@ -127,7 +127,7 @@ public class Sentence {
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
-    TableMapReduceUtil.initTableReducerJob("summaryTable", SentenceReducer.class, job);
+    TableMapReduceUtil.initTableReducerJob("sentenceTable", SentenceReducer.class, job);
     
     //args[0] = directory path
     File folder = new File(args[0]);
