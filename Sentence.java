@@ -43,8 +43,25 @@ public class Sentence {
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
-      FileSplit fsFileSplit = (FileSplit) context.getInputSplit();
-      filename = context.getConfiguration().get(fsFileSplit.getPath().getParent().getName());
+      // FileSplit fsFileSplit = (FileSplit) context.getInputSplit();
+      // filename = context.getConfiguration().get(fsFileSplit.getPath().getParent().getName());
+
+      InputSplit split = context.getInputSplit();
+      Class<? extends InputSplit> splitClass = split.getClass();
+
+      FileSplit fileSplit = null;
+      if (splitClass.equals(FileSplit.class)) {
+          fileSplit = (FileSplit) split;
+      } else if (splitClass.getName().equals("org.apache.hadoop.mapreduce.lib.input.TaggedInputSplit")) {
+          try {
+              Method getInputSplitMethod = splitClass.getDeclaredMethod("getInputSplit");
+              getInputSplitMethod.setAccessible(true);
+              fileSplit = (FileSplit) getInputSplitMethod.invoke(split);
+              filename = context.getConfiguration().get(fileSplit.getPath().getParent().getName());
+          } catch (Exception e) {
+              throw new IOException(e);
+          }
+      }
     }
 
     @Override
