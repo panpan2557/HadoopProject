@@ -88,8 +88,8 @@ public class Sentence {
   }
 
   public static void main(String[] args) throws Exception {
-    Configuration conf = HBaseConfiguration.create();
-    // HBaseConfiguration hConf = new HBaseConfiguration();
+    // Configuration conf = HBaseConfiguration.create();
+    HBaseConfiguration conf = new HBaseConfiguration();
 
     // String hbaseZookeeperQuorum = "52.221.246.249";
     // int hbaseZookeeperClientPort = 2181;
