@@ -29,6 +29,7 @@ import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.hbase.client.*;
 
 public class Sentence {
@@ -125,7 +126,7 @@ public class Sentence {
     job.setMapperClass(SplitMapper.class);
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(Text.class);
-    TableMapReduceUtil.initTableReducerJob("summary_sentence", SentenceReducer.class, job);
+    TableMapReduceUtil.initTableReducerJob("summaryTable", SentenceReducer.class, job);
     
     //args[0] = directory path
     File folder = new File(args[0]);
