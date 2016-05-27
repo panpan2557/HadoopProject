@@ -29,6 +29,7 @@ import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapred.FileSplit;
+import org.apache.hadoop.hbase.client.*;
 
 public class Sentence {
 
@@ -95,6 +96,8 @@ public class Sentence {
 
     hConf.set(HBASE_CONFIGURATION_ZOOKEEPER_QUORUM, hbaseZookeeperQuorum);
     hConf.setInt(HBASE_CONFIGURATION_ZOOKEEPER_CLIENTPORT, hbaseZookeeperClientPort);
+
+    HBaseAdmin.checkHBaseAvailable(hConf);
     
     //create sentenceTable
     HTable hTable = new HTable(hConf, tableName);
