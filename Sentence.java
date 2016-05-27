@@ -31,6 +31,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.hbase.client.*;
+import java.lang.reflect.Method;
 
 public class Sentence {
 
